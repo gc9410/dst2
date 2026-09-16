@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>大沈堂｜八維生命全景透視・三牌塔羅心靈儀軌</title>
+  <meta name="description" content="大沈堂結合靈數、星象、八字、紫微、數字易經、姓名學、脈輪與經典偉特三牌陣，3秒透視你的先天劇本與後天磁場。" />
+
+  <style>
+    :root {
+      --bg: #f5efe7;
+      --paper: #fffaf3;
+      --ink: #342f2a;
+      --ink-soft: #4e463e;
+      --muted: #7d7265;
+      --gold: #b79f66;
+      --gold-light: #dfcaa0;
+      --sage: #8b9889;
+      --sage-dark: #627060;
+      --clay: #a68b77;
+      --red-alert: #a44a3f;
+      --line: rgba(78, 65, 52, 0.15);
+      --shadow: 0 24px 60px rgba(60, 48, 38, 0.12);
+      --radius: 24px;
+      --serif: "Noto Serif TC", "Songti TC", serif;
+      --sans: "Noto Sans TC", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--serif);
+      background: radial-gradient(circle at 10% 10%, rgba(200,170,162,0.28), transparent 30%),
+                  radial-gradient(circle at 90% 15%, rgba(139,152,137,0.3), transparent 32%),
+                  linear-gradient(180deg, var(--bg), #ece2d6 50%, #f6f0e8);
+      color: var(--ink);
+      line-height: 1.8;
+      letter-spacing: 0.04em;
+      overflow-x: hidden;
+    }
+
+    .container { width: min(1140px, calc(100% - 36px)); margin: 0 auto; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+
+    /* Topbar */
+    .topbar {
+      position: fixed; inset: 0 0 auto 0; z-index: 100;
+      background: rgba(245, 239, 231, 0.85); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav { height: 72px; display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .seal {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(145deg, var(--gold), var(--sage-dark));
+      color: #fff; display: grid; place-items: center; font-weight: bold;
+    }
+    .brand-text strong { display: block; font-size: 17px; letter-spacing: 0.2em; }
+    .brand-text span { display: block; font-family: var(--sans); font-size: 9px; color: var(--muted); letter-spacing: 0.18em; }
+    .nav-btn {
+      padding: 8px 18px; border-radius: 999px; background: var(--ink); color: #fff !important;
+      font-family: var(--sans); font-size: 13px;
+    }
+
+    /* Hero */
+    .hero { padding: 130px 0 60px; text-align: center; }
+    .hero-tag {
+      display: inline-block; padding: 4px 14px; border-radius: 999px;
+      background: rgba(183, 159, 102, 0.16); color: var(--clay);
+      font-family: var(--sans); font-size: 12px; letter-spacing: 0.18em; margin-bottom: 14px;
+    }
+    h1 { font-size: clamp(34px, 5.2vw, 64px); line-height: 1.25; font-weight: 500; margin-bottom: 16px; }
+    .hero-sub { color: var(--muted); font-size: clamp(16px, 2vw, 22px); max-width: 780px; margin: 0 auto 36px; }
+
+    /* 透視輸入台 */
+    .calc-console {
+      background: linear-gradient(180deg, rgba(255,250,243,0.95), rgba(244,236,225,0.9));
+      border: 1px solid rgba(78, 65, 52, 0.18); border-radius: 32px;
+      padding: 36px 30px; box-shadow: var(--shadow); max-width: 880px; margin: 0 auto;
+    }
+    .input-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; text-align: left; }
+    .field label { display: block; font-family: var(--sans); font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .field input, .field select {
+      width: 100%; height: 48px; border-radius: 12px; border: 1px solid var(--line);
+      background: rgba(255,255,255,0.85); padding: 0 12px; font-family: var(--sans); font-size: 15px;
+      color: var(--ink); outline: none; transition: border 0.2s;
+    }
+    .field input:focus, .field select:focus { border-color: var(--gold); }
+    .btn-scan {
+      width: 100%; height: 54px; margin-top: 20px; border-radius: 999px; border: 0;
+      background: var(--ink); color: #fff; font-size: 16px; letter-spacing: 0.1em;
+      cursor: pointer; box-shadow: 0 12px 30px rgba(52, 47, 42, 0.25); transition: transform 0.2s;
+    }
+    .btn-scan:hover { transform: translateY(-2px); }
+
+    /* 儀表板 */
+    #dashboard { display: none; margin-top: 50px; animation: fadeInUp 0.6s ease forwards; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .summary-alert {
+      padding: 24px 30px; border-radius: 20px; text-align: left;
+      background: radial-gradient(circle at 90% 0%, rgba(223, 202, 160, 0.3), transparent 50%), #fffaf3;
+      border: 1px solid rgba(183, 159, 102, 0.35); box-shadow: var(--shadow); margin-bottom: 28px;
+    }
+    .summary-alert h2 { font-size: 24px; font-weight: 500; margin-bottom: 8px; color: var(--ink); }
+    .summary-alert p { color: var(--ink-soft); font-size: 15.5px; }
+
+    .octa-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .octa-card {
+      background: rgba(255, 250, 243, 0.85); border: 1px solid var(--line);
+      border-radius: 20px; padding: 22px 18px; text-align: left; display: flex; flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .octa-card:hover { transform: translateY(-4px); box-shadow: 0 14px 36px rgba(60,48,38,0.1); }
+    .octa-badge {
+      font-family: var(--sans); font-size: 11px; padding: 3px 8px; border-radius: 6px;
+      background: rgba(139,152,137,0.18); color: var(--sage-dark); align-self: flex-start; margin-bottom: 10px;
+    }
+    .octa-card h3 { font-size: 17px; margin-bottom: 4px; font-weight: 500; }
+    .octa-val { font-size: 14.5px; color: var(--clay); font-weight: bold; margin-bottom: 8px; }
+    .octa-hint { font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 12px; flex-grow: 1; }
+    .octa-hook { border-top: 1px dashed var(--line); padding-top: 8px; font-size: 12px; color: var(--red-alert); font-family: var(--sans); }
+
+    /* ================= 經典偉特三牌陣沈浸儀式專區 ================= */
+    .tarot-ritual-section {
+      margin-top: 40px; padding: 36px 30px; border-radius: 32px;
+      background: radial-gradient(circle at 10% 10%, rgba(183,159,102,0.15), transparent 40%),
+                  linear-gradient(180deg, #fffaf3, #f2eadf);
+      border: 1px solid rgba(183,159,102,0.3); box-shadow: var(--shadow); text-align: center;
+    }
+    .ritual-head h3 { font-size: 26px; font-weight: 500; margin-bottom: 8px; letter-spacing: 0.08em; }
+    .ritual-guide {
+      color: var(--clay); font-size: 15px; margin-bottom: 26px; max-width: 680px; margin-left: auto; margin-right: auto;
+    }
+
+    /* 待選洗牌牌垛 */
+    .deck-ribbon {
+      display: flex; justify-content: center; gap: 8px; overflow-x: auto; padding: 16px 8px;
+      margin-bottom: 24px;
+    }
+    .card-back {
+      width: 58px; height: 90px; border-radius: 8px;
+      background: linear-gradient(135deg, #2b2621, #483f36);
+      border: 1px solid var(--gold); box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+      cursor: pointer; transition: transform 0.25s, box-shadow 0.25s; flex-shrink: 0;
+      position: relative;
+    }
+    .card-back::after {
+      content: "✦"; position: absolute; inset: 0; display: grid; place-items: center;
+      color: var(--gold-light); font-size: 16px; opacity: 0.6;
+    }
+    .card-back:hover { transform: translateY(-10px) scale(1.05); box-shadow: 0 10px 20px rgba(183,159,102,0.4); }
+
+    /* 三張開牌槽位 */
+    .spread-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 860px; margin: 0 auto; }
+    .spread-slot {
+      background: rgba(255,250,243,0.7); border: 1.5px dashed var(--line);
+      border-radius: 20px; padding: 20px 16px; min-height: 330px; display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-start; transition: all 0.3s;
+    }
+    .spread-slot.active { border-color: var(--gold); background: #fffaf3; box-shadow: 0 10px 28px rgba(60,48,38,0.08); }
+    .slot-tag {
+      font-family: var(--sans); font-size: 11px; padding: 4px 10px; border-radius: 999px;
+      background: rgba(183,159,102,0.18); color: var(--clay); margin-bottom: 14px; font-weight: bold;
+    }
+    .slot-title { font-size: 16px; font-weight: bold; color: var(--ink); margin-bottom: 12px; }
+    
+    .revealed-card {
+      width: 90px; height: 140px; border-radius: 12px;
+      background: linear-gradient(145deg, #fffaf3, #ede3d6);
+      border: 1.5px solid var(--gold); box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+      display: grid; place-items: center; font-size: 32px; margin-bottom: 14px;
+      animation: flipCard 0.6s ease forwards;
+    }
+    @keyframes flipCard { from { transform: rotateY(90deg); opacity: 0; } to { transform: rotateY(0deg); opacity: 1; } }
+    .card-name-label { font-size: 16px; font-weight: bold; color: var(--ink); margin-bottom: 6px; }
+    .card-msg-label { font-size: 13px; color: var(--ink-soft); line-height: 1.6; text-align: justify; }
+
+    /* 牌陣整體綜合解語 */
+    #tarotSynthesis {
+      display: none; margin-top: 24px; padding: 20px 24px; border-radius: 16px;
+      background: rgba(139,152,137,0.16); border: 1px solid rgba(139,152,137,0.3);
+      text-align: left; font-size: 14.5px; color: var(--ink-soft); line-height: 1.7;
+      animation: fadeIn 0.5s ease;
+    }
+
+    /* 終極付費誘導區 */
+    .convert-box {
+      margin-top: 50px; padding: 50px 36px; border-radius: 32px;
+      background: radial-gradient(circle at 80% 20%, rgba(223,202,160,0.25), transparent 40%),
+                  linear-gradient(145deg, #37322c, #52473c);
+      color: #fff; text-align: center; box-shadow: 0 30px 80px rgba(50,40,30,0.3);
+    }
+    .convert-box h3 { font-size: clamp(26px, 3.5vw, 40px); font-weight: 500; margin-bottom: 16px; letter-spacing: 0.08em; }
+    .convert-box p { color: rgba(255,250,243,0.78); font-size: 16px; max-width: 720px; margin: 0 auto 30px; }
+    .convert-actions { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .btn-gold {
+      padding: 14px 34px; border-radius: 999px; background: var(--gold); color: #fff;
+      font-family: var(--sans); font-size: 15px; border: 0; cursor: pointer;
+    }
+    .btn-outline {
+      padding: 14px 34px; border-radius: 999px; background: transparent; color: #fff;
+      border: 1px solid rgba(255,250,243,0.35); font-family: var(--sans); font-size: 15px;
+    }
+
+    @media (max-width: 900px) {
+      .input-grid, .octa-grid, .spread-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container nav">
+      <a href="#top" class="brand">
+        <div class="seal">沈</div>
+        <div class="brand-text">
+          <strong>大沈堂</strong>
+          <span>EIGHT-DIMENSION LIFE SCAN</span>
+        </div>
+      </a>
+      <a class="nav-btn" href="#convert">預約完整合參</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero" id="top">
+      <div class="hero-tag">知命・改命・造命</div>
+      <h1>你的靈魂骨架，<br />正被哪種後天磁場暗中拖累？</h1>
+      <p class="hero-sub">
+        很多時候你賺不到錢、愛得委屈、容易疲倦，不是你不努力，而是「先天體質與後天號碼」正在打架。
+        輸入資料，3秒開啟大沈堂八維全景即刻透視：
+      </p>
+
+      <!-- 互動控制台 -->
+      <div class="calc-console">
+        <form id="scanForm">
+          <div class="input-grid">
+            <div class="field">
+              <label>你的真實姓名 *</label>
+              <input id="inName" type="text" placeholder="例如：林芳宇" required />
+            </div>
+            <div class="field">
+              <label>西元出生年月日 *</label>
+              <input id="inBirth" type="date" required />
+            </div>
+            <div class="field">
+              <label>出生時辰 (選填)</label>
+              <select id="inHour">
+                <option value="-1">不清楚時辰</option>
+                <option value="0">子時 (23:00-01:00)</option>
+                <option value="2">丑時 (01:00-03:00)</option>
+                <option value="4">寅時 (03:00-05:00)</option>
+                <option value="6">卯時 (05:00-07:00)</option>
+                <option value="8">辰時 (07:00-09:00)</option>
+                <option value="10">巳時 (09:00-11:00)</option>
+                <option value="12">午時 (11:00-13:00)</option>
+                <option value="14">未時 (13:00-15:00)</option>
+                <option value="16">申時 (15:00-17:00)</option>
+                <option value="18">酉時 (17:00-19:00)</option>
+                <option value="20">戌時 (19:00-21:00)</option>
+                <option value="22">亥時 (21:00-23:00)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>常用手機末 4 碼 *</label>
+              <input id="inPhone" type="text" maxlength="4" placeholder="例如：8134" pattern="\d{4}" required />
+            </div>
+          </div>
+
+          <button class="btn-scan" type="submit">開啟我的八維生命全景透視 ➔</button>
+        </form>
+      </div>
+
+      <!-- 透視儀表板 (點擊掃描後展開) -->
+      <div id="dashboard">
+        <div class="summary-alert">
+          <h2 id="sumTitle">大沈堂綜合診斷：林芳宇的先天靈魂 vs 後天磁場</h2>
+          <p id="sumDesc">透視載入中...</p>
+        </div>
+
+        <!-- 前七大維度卡片 -->
+        <div class="octa-grid">
+          <div class="octa-card">
+            <span class="octa-badge">先天骨架</span>
+            <h3>生命靈數</h3>
+            <div class="octa-val" id="valLife">-</div>
+            <div class="octa-hint" id="hintLife">-</div>
+            <div class="octa-hook">🔒 同樣號碼，為何有人富足有人耗竭？完整元本圖待解</div>
+          </div>
+
+          <div class="octa-card">
+            <span class="octa-badge">情感原型</span>
+            <h3>西方星象</h3>
+            <div class="octa-val" id="valZodiac">-</div>
+            <div class="octa-hint" id="hintZodiac">-</div>
+            <div class="octa-hook">🔒 月亮與上升守護點，深層恐懼尚未顯露</div>
+          </div>
+
+          <div class="octa-card">
+            <span class="octa-badge">五行本質</span>
+            <h3>子平八字日元</h3>
+            <div class="octa-val" id="valBazi">-</div>
+            <div class="octa-hint" id="hintBazi">-</div>
+            <div class="octa-hook">⚠️ 自身五行受剋，近期易感體力透支與貴人遠離</div>
+          </div>
+
+          <div class="octa-card">
+            <span class="octa-badge">天時氣數</span>
+            <h3>東方紫微星相</h3>
+            <div class="octa-val" id="valZiwei">-</div>
+            <div class="octa-hint" id="hintZiwei">-</div>
+            <div class="octa-hook">🔒 未來3年十年大運正逢轉折關卡，需明進退</div>
+          </div>
+
+          <div class="octa-card" style="border-color: rgba(164,74,63,0.3);">
+            <span class="octa-badge" style="background: rgba(164,74,63,0.15); color: var(--red-alert);">後天隨身磁場</span>
+            <h3>數字易經 (手機末4碼)</h3>
+            <div class="octa-val" id="valPhone">-</div>
+            <div class="octa-hint" id="hintPhone">-</div>
+            <div class="octa-hook">⚠️ 此磁場正在暗耗你的財庫或招惹口舌是非！</div>
+          </div>
+
+          <div class="octa-card">
+            <span class="octa-badge">聲音頻率</span>
+            <h3>大沈堂姓名學</h3>
+            <div class="octa-val" id="valName">-</div>
+            <div class="octa-hint" id="hintName">-</div>
+            <div class="octa-hook">🔒 名字五行與日元生剋關係未校準，易吃悶虧</div>
+          </div>
+
+          <div class="octa-card">
+            <span class="octa-badge">身心能量</span>
+            <h3>七脈輪堵塞點</h3>
+            <div class="octa-val" id="valChakra">-</div>
+            <div class="octa-hint" id="hintChakra">-</div>
+            <div class="octa-hook">✦ 需藉由專屬能量載體 (水晶/精油) 疏通頻率</div>
+          </div>
+
+          <div class="octa-card" style="border-color: var(--gold);">
+            <span class="octa-badge" style="background: rgba(183,159,102,0.2); color: var(--clay);">第八維度・當下顯相</span>
+            <h3>大沈堂經典塔羅</h3>
+            <div class="octa-val" id="valTarotStatus">三牌儀式啟動中</div>
+            <div class="octa-hint">生日是命定之數，塔羅是宇宙映照你此刻心境的三面明鏡。請於下方完成儀軌。</div>
+            <div class="octa-hook">✦ 現況 ➔ 卡點 ➔ 晨光解方</div>
+          </div>
+        </div>
+
+        <!-- ================= 經典偉特三牌陣沈浸儀式專區 ================= -->
+        <div class="tarot-ritual-section">
+          <div class="ritual-head">
+            <h3>大沈堂・經典偉特三牌陣心靈儀軌</h3>
+            <p class="ritual-guide" id="ritualStatusText">
+              ✦ 儀軌第一步：請輕輕閉上眼，深呼吸三次，在心中默念你此刻最想問的一件事（事業、關係、下一步抉擇）。
+              準備好後，<strong>請從下方牌垛依序感應點選 3 張牌</strong>：
+            </p>
+          </div>
+
+          <!-- 待選牌垛 (22張大阿爾克那) -->
+          <div class="deck-ribbon" id="deckRibbon">
+            <!-- JS 動態生成 22 張牌背 -->
+          </div>
+
+          <!-- 三張牌展開槽位 -->
+          <div class="spread-grid">
+            <!-- 第 1 張：現況實相 -->
+            <div class="spread-slot" id="slot1">
+              <span class="slot-tag">第 1 張牌</span>
+              <div class="slot-title">此刻顯像・心境實相</div>
+              <div id="slotContent1" style="color: var(--muted); font-size: 13px; margin-top: 40px;">
+                ✦ 等待感應翻牌...
+              </div>
+            </div>
+
+            <!-- 第 2 張：隱藏卡點 -->
+            <div class="spread-slot" id="slot2">
+              <span class="slot-tag">第 2 張牌</span>
+              <div class="slot-title">潛在盲區・能量卡點</div>
+              <div id="slotContent2" style="color: var(--muted); font-size: 13px; margin-top: 40px;">
+                ✦ 等待感應翻牌...
+              </div>
+            </div>
+
+            <!-- 第 3 張：晨光指引 -->
+            <div class="spread-slot" id="slot3">
+              <span class="slot-tag">第 3 張牌</span>
+              <div class="slot-title">破局指引・晨光解方</div>
+              <div id="slotContent3" style="color: var(--muted); font-size: 13px; margin-top: 40px;">
+                ✦ 等待感應翻牌...
+              </div>
+            </div>
+          </div>
+
+          <!-- 三牌綜合點評 (翻完自動出現) -->
+          <div id="tarotSynthesis">
+            <strong style="color: var(--ink); font-size: 16px;">✦ 大沈堂宗師三牌合參點評：</strong><br />
+            <span id="synthesisText"></span>
+          </div>
+        </div>
+
+        <!-- 轉換誘因區 -->
+        <div class="convert-box" id="convert">
+          <h3>你看見了冰山，但海面下還有 90% 的暗湧</h3>
+          <p>
+            剛剛的 8 個維度只展示了你的表層斷語。  
+            你的名字五行有沒有被八字認可？你的手機號碼正在漏掉哪筆財？未來 3 年你的紫微大運走到哪座宮位？塔羅指出的盲區如何透過能量載體化解？  
+            這不是算命，這是你的**生命全景工程**。
+          </p>
+          <div class="convert-actions">
+            <button class="btn-gold" onclick="submitToBooking('預約天人之鏡合參專案')">預約完整合參諮商 (含完整報告)</button>
+            <button class="btn-outline" onclick="submitToBooking('索取生命三句與後天號碼解厄建議')">免費領取三句晨光與解厄指引</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ==========================================
+    // 請替換此處為你的 Google Apps Script Web App URL
+    // ==========================================
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_請替換成你的GAS部署URL/exec";
+
+    // 經典偉特 22 張大阿爾克那完整庫
+    const classicMajorArcana = [
+      { id: 0, name: "0 愚者 (The Fool)", icon: "🎒", current: "身處未知與轉折關口，渴望擺脫束縛冒險出發。", obstacle: "過於天真缺乏周詳備案，容易因衝動忽視現實地雷。", advice: "允許自己擁有一顆不設限的初心，但腳步要踩穩大地。" },
+      { id: 1, name: "I 魔術師 (The Magician)", icon: "🪄", current: "手中資源與技能已然具備，正準備大展拳腳。", obstacle: "思緒過於紛雜、想做的事情太多，反而難以聚焦力量。", advice: "主動發起！你早已萬事俱備，缺的只是付諸行動的決心。" },
+      { id: 2, name: "II 女祭司 (The High Priestess)", icon: "📜", current: "表面波瀾不驚，內心直覺與潛意識活動異常敏銳。", obstacle: "防備心過重、過度內縮，難以對周遭人交付真實信任。", advice: "相信你安靜下來時的第一直覺，答案早已在你心底。" },
+      { id: 3, name: "III 皇后 (The Empress)", icon: "🌾", current: "渴望被愛與豐盛滋養，重視感官與情感體驗。", obstacle: "容易因過度縱容怠惰，或在感情中過度索求安全感。", advice: "停止對自己的嚴苛批判，先善待身心，豐盛自然湧入。" },
+      { id: 4, name: "IV 皇帝 (The Emperor)", icon: "👑", current: "身處扛責任、爭取主控權或面對權威的壓力中。", obstacle: "控制欲過強、難以示弱，把自己逼到情緒緊繃的懸崖。", advice: "重新劃定明確邊界，用制度與智慧管理，而非單靠蠻力硬撐。" },
+      { id: 5, name: "V 教皇 (The Hierophant)", icon: "🕊️", current: "在傳統體制、社會規則與道德框架中尋找指引。", obstacle: "過度墨守成規、在意他人風評，壓抑了真實的內在渴望。", advice: "尋找值得信賴的導師智囊，在規則中找到安頓心靈的中道。" },
+      { id: 6, name: "VI 戀人 (The Lovers)", icon: "❤️", current: "正面臨關乎心靈價值、合夥或親密關係的重大抉擇。", obstacle: "在多個看似美好的選擇前猶豫不決，害怕承擔選擇後的代價。", advice: "誠實問自己的靈魂：哪一個選擇能讓你活得更像真實的自己？" },
+      { id: 7, name: "VII 戰車 (The Chariot)", icon: "🛡️", current: "克服內在矛盾全力衝刺，意志力正處於高峰期。", obstacle: "情緒與理智兩匹韁繩拉扯過烈，用力過猛容易擦槍走火。", advice: "保持專注與堅定，別被路旁雜音干擾，勝利屬於堅持到底者。" },
+      { id: 8, name: "VIII 力量 (Strength)", icon: "🦁", current: "正以極大的耐心應對某個棘手的人事或內心恐懼。", obstacle: "試圖壓抑心中的脆弱野獸，過度消耗耐心瀕臨爆發點。", advice: "真正的剛強是以極致的溫柔化解堅硬，學會與自己的恐懼和解。" },
+      { id: 9, name: "IX 隱者 (The Hermit)", icon: "🏮", current: "感到外在世界的喧囂孤寂，迫切需要獨處沉澱自我。", obstacle: "自我封閉過深，因害怕被曲解而拒絕與外界能量交流。", advice: "退回自己的洞穴點亮那盞提燈，看清前路後再優雅走出。" },
+      { id: 10, name: "X 命運之輪 (Wheel of Fortune)", icon: "☸️", current: "感受到環境正經歷無可逆轉的週期更迭與命運浪潮。", obstacle: "妄圖對抗命運轉折，在逆風時死磕、順風時過於狂妄。", advice: "順應宇宙週期，逆境時修持內功，機遇來時果斷揚帆起航。" },
+      { id: 11, name: "XI 正義 (Justice)", icon: "⚖️", current: "追求公平客觀，正面臨合約、法律或道德因果檢驗。", obstacle: "過於理性冷酷、非黑即白，忽略了人性幽微的情感溫度。", advice: "對自己的所有選擇負全責，拋棄受害者思維，平衡因果。" },
+      { id: 12, name: "XII 倒吊人 (The Hanged Man)", icon: "👣", current: "處於前進不得的膠著期，被迫停下腳步自我犧牲。", obstacle: "自怨自艾，深陷無謂的犧牲者情結而無法自拔。", advice: "換個顛倒的視角看世界！當下的停滯正是靈魂蛻變的沉澱期。" },
+      { id: 13, name: "XIII 死神 (Death)", icon: "🥀", current: "一段舊模式、舊關係或消耗已久的階段正步入終局。", obstacle: "死抓著腐朽的過去不肯放手，任由殘留執念折磨身心。", advice: "允許枯葉落下！徹底斷捨離，唯有向死而生，新生才會綻放。" },
+      { id: 14, name: "XIV 節制 (Temperance)", icon: "🏺", current: "努力在衝突的立場、生活節奏與身心狀態中尋求和諧。", obstacle: "調和過程過於妥協平庸，為了表面和諧而稀釋了真實熱情。", advice: "耐心地將不同能量慢火提煉，身心頻率校準後，奇蹟自現。" },
+      { id: 15, name: "XV 惡魔 (The Devil)", icon: "⛓️", current: "被物質誘惑、執念、依賴關係或深層慾望緊緊捆綁。", obstacle: "明知眼前是消耗自己的毒藥，卻因短暫快感與恐懼甘願沉淪。", advice: "看清綁在你脖子上的鎖鏈其實很鬆，只要你想，鑰匙一直在你手中。" },
+      { id: 16, name: "XVI 高塔 (The Tower)", icon: "⚡", current: "遭遇突如其來的打擊、幻想破滅或生活秩序劇烈震盪。", obstacle: "因抗拒崩塌而恐慌絕望，把破壞當作毀滅而非解放。", advice: "虛假的根基終究要倒塌。震盪是宇宙的慈悲，為你清空地基重建宮殿。" },
+      { id: 17, name: "XVII 星星 (The Star)", icon: "🌟", current: "在經歷風暴後內心湧現微弱而純淨的希望與靈性復甦。", obstacle: "願景美好但缺乏具體落地的行動方案，容易淪為空想。", advice: "卸下所有武裝，讓心靈浸泡在希望之泉中，你的指引之星已升起。" },
+      { id: 18, name: "XVIII 月亮 (The Moon)", icon: "🌔", current: "內心充滿無法言說的莫明焦慮、猜忌與潛意識迷霧。", obstacle: "被自己腦中編造的恐懼劇本嚇退，容易聽信流言誤判局勢。", advice: "迷霧之中莫做重大承諾。安撫受驚的情緒，靜待黎明破曉。" },
+      { id: 19, name: "XIX 太陽 (The Sun)", icon: "☀️", current: "內在充滿生機與自信，喜悅與成功的光芒即將破曉。", obstacle: "過度自信樂觀而輕視細節，或過於外放灼傷周遭他人。", advice: "像孩童般純粹地釋放你的熱忱！光芒萬丈，陰霾自然消散。" },
+      { id: 20, name: "XX 審判 (Judgement)", icon: "🎺", current: "聽見靈魂深處的宏大召喚，面臨人生重要關口的大覺醒。", obstacle: "沉溺於過去的悔恨與得失，猶豫著不敢回應命運的邀請。", advice: "站起來！這是你破繭重生的時刻，放下舊包袱，迎接全面昇華。" },
+      { id: 21, name: "XXI 世界 (The World)", icon: "🌍", current: "一個重要的人生階段達成圓滿，迎來豐收與成就結行。", obstacle: "留戀過去的成功舒適圈，害怕邁向下一趟全新冒險旅程。", advice: "慶祝你的圓滿！你已完成這段英雄之旅，更廣袤的新世界正等待著你。" }
+    ];
+
+    // 八字日元天干五行
+    function getBaziDay(dateObj) {
+      const base = new Date(1900, 0, 31);
+      const diff = Math.floor((dateObj - base) / (86400000));
+      const gans = [
+        { n:"庚金", desc:"剛毅果決，講求界線，但太硬易折。" },
+        { n:"辛金", desc:"追求極致完美，自尊心高，暗藏孤傲。" },
+        { n:"壬水", desc:"奔湧智慧，不喜束縛，但易情緒漂泊。" },
+        { n:"癸水", desc:"細膩如晨露，直覺深沉，易生悶氣。" },
+        { n:"甲木", desc:"參天大樹，仁慈有抱負，不易妥協低頭。" },
+        { n:"乙木", desc:"柔韌藤蔓，借力打力，易委屈自己求全。" },
+        { n:"丙火", desc:"太陽光烈，熱心照耀眾人，夜晚易孤寂。" },
+        { n:"丁火", desc:"燭光燈火，體貼溫暖，易自我燃燒過度。" },
+        { n:"戊土", desc:"厚重大地，極具包容信譽，但主觀執念重。" },
+        { n:"己土", desc:"溫和濕土，善於協調，易被環境牽著走。" }
+      ];
+      return gans[(diff % 10 + 10) % 10];
+    }
+
+    // 數字易經分析 (手機末4碼)
+    function analyzePhone(phone4) {
+      const iching = {
+        "19":"延年金(事業強/勞碌)","91":"延年金(大主管/勞累)","78":"延年金(穩重操心)","87":"延年金(穩重操心)","34":"延年金(小主管)","43":"延年金(小責任)",
+        "13":"天醫土(大財進帳)","31":"天醫土(大財富)","68":"天醫土(賺錢順利)","86":"天醫土(財源不斷)","49":"天醫土(偏財運)","94":"天醫土(小回饋)",
+        "14":"生氣木(貴人多)","41":"生氣木(轉機大)","67":"生氣木(人緣好)","76":"生氣木(貴人助)","39":"生氣木(隨緣)","93":"生氣木(快樂)",
+        "18":"五鬼火(突發暗耗/失眠)","81":"五鬼火(點子多/破財)","79":"五鬼火(心神不定)","97":"五鬼火(情緒變動)","36":"五鬼火(血光/突發)","63":"五鬼火(暗耗漏財)",
+        "12":"絕命金(大起大落/敢拼)","21":"絕命金(投資破耗)","69":"絕命金(開銷失控)","96":"絕命金(極端奔波)","48":"絕命金(辛苦操勞)","84":"絕命金(起伏不定)",
+        "17":"禍害土(口舌是非/小人)","71":"禍害土(愛抱怨/是非)","89":"禍害土(嘴硬面子)","98":"禍害土(身體欠佳)","46":"禍害土(口角摩擦)","64":"禍害土(爭執)",
+        "16":"六煞水(異性糾纏/憂鬱)","61":"六煞水(情緒內耗)","47":"六煞水(為情所困)","74":"六煞水(鬱悶)","38":"六煞水(猶豫不決)","83":"六煞水(人際煩惱)"
+      };
+      const p1 = phone4.substr(0,2);
+      const p2 = phone4.substr(1,2);
+      const p3 = phone4.substr(2,2);
+      const s1 = iching[p1] || "伏位(守成等待)";
+      const s2 = iching[p2] || "伏位(平穩蓄能)";
+      const s3 = iching[p3] || "伏位(平靜)";
+      return {
+        pairText: `${s1} ➔ ${s3}`,
+        isDanger: (s1+s2+s3).includes("五鬼") || (s1+s2+s3).includes("絕命") || (s1+s2+s3).includes("禍害")
+      };
+    }
+
+    // 星座計算
+    function getZodiac(m, d) {
+      const dates = [20, 19, 21, 20, 21, 22, 23, 23, 23, 24, 22, 22];
+      const signs = ["摩羯座", "水瓶座", "雙魚座", "牡羊座", "金牛座", "雙子座", "巨蟹座", "獅子座", "處女座", "天秤座", "天蠍座", "射手座", "摩羯座"];
+      return d > dates[m - 1] ? signs[m] : signs[m - 1];
+    }
+
+    // 洗牌初始化
+    let chosenCards = [];
+    let currentStep = 1;
+    let shuffledDeck = [];
+
+    function initDeck() {
+      shuffledDeck = [...classicMajorArcana].sort(() => Math.random() - 0.5);
+      const ribbon = document.getElementById('deckRibbon');
+      ribbon.innerHTML = "";
+      for (let i = 0; i < 22; i++) {
+        const cardEl = document.createElement('div');
+        cardEl.className = "card-back";
+        cardEl.title = "點擊感應這張牌";
+        cardEl.onclick = () => selectCard(i, cardEl);
+        ribbon.appendChild(cardEl);
+      }
+    }
+
+    function selectCard(index, el) {
+      if (currentStep > 3) return;
+      el.style.opacity = "0.3";
+      el.style.pointerEvents = "none";
+
+      const card = shuffledDeck[index];
+      chosenCards.push(card);
+
+      // 渲染到對應槽位
+      const slotEl = document.getElementById(`slotContent${currentStep}`);
+      const slotBox = document.getElementById(`slot${currentStep}`);
+      slotBox.classList.add('active');
+
+      let msgText = "";
+      if (currentStep === 1) msgText = card.current;
+      if (currentStep === 2) msgText = card.obstacle;
+      if (currentStep === 3) msgText = card.advice;
+
+      slotEl.innerHTML = `
+        <div class="revealed-card">${card.icon}</div>
+        <div class="card-name-label">${card.name}</div>
+        <div class="card-msg-label">${msgText}</div>
+      `;
+
+      currentStep++;
+      const statusText = document.getElementById('ritualStatusText');
+
+      if (currentStep === 2) {
+        statusText.innerHTML = `✦ 第一張【現況顯像】已揭曉！請再次感應，點選第 2 張牌看見<strong>【潛在盲區・能量卡點】</strong>：`;
+      } else if (currentStep === 3) {
+        statusText.innerHTML = `✦ 第二張【能量卡點】已入座！請深呼吸，點選最後第 3 張牌獲取<strong>【破局指引・晨光解方】</strong>：`;
+      } else if (currentStep > 3) {
+        statusText.innerHTML = `✦ 三牌儀軌圓滿達成！大沈堂已將三牌與你的八字、靈數全面合參點評如下：`;
+        renderSynthesis();
+      }
+    }
+
+    function renderSynthesis() {
+      const c1 = chosenCards[0];
+      const c2 = chosenCards[1];
+      const c3 = chosenCards[2];
+      const synBox = document.getElementById('tarotSynthesis');
+      const synText = document.getElementById('synthesisText');
+
+      synText.innerHTML = `
+        你此刻正經歷 <strong>${c1.name}</strong> 的實相考驗，表面雖極力維持平衡，但深層正遭受 <strong>${c2.name}</strong> 的盲點與恐懼暗耗！  
+        大沈堂給你的破局晨光之道在於 <strong>${c3.name}</strong> —— 停止無謂的向外證明，將焦點拉回自身的中心力量。  
+        <em>（註：這組三牌的卡點，正與你的後天號碼磁場深度共振，建議在下方預約完整合參諮詢。）</em>
+      `;
+      synBox.style.display = "block";
+      document.getElementById('valTarotStatus').innerText = `${c1.name.split(' ')[1]} ➔ ${c2.name.split(' ')[1]} ➔ ${c3.name.split(' ')[1]}`;
+    }
+
+    // 表單送出掃描
+    document.getElementById('scanForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('inName').value.trim();
+      const birthStr = document.getElementById('inBirth').value;
+      const hour = parseInt(document.getElementById('inHour').value);
+      const phone = document.getElementById('inPhone').value.trim();
+
+      const bDate = new Date(birthStr);
+      const y = bDate.getFullYear();
+      const m = bDate.getMonth() + 1;
+      const d = bDate.getDate();
+
+      // 1. 生命靈數
+      let sum = `${y}${String(m).padStart(2,'0')}${String(d).padStart(2,'0')}`.split('').reduce((a,b)=>a+Number(b),0);
+      while(sum > 9) sum = String(sum).split('').reduce((a,b)=>a+Number(b),0);
+      const lifeNum = sum === 0 ? 9 : sum;
+
+      // 2. 星座
+      const zodiac = getZodiac(m, d);
+
+      // 3. 八字日元
+      const bazi = getBaziDay(bDate);
+
+      // 4. 紫微命格 (簡易氣相)
+      const ziweiList = ["紫微天府(格局高傲)","天機巨門(善思多慮)","太陽太陰(陰陽拉扯)","武曲七殺(剛毅肅殺)","天同天梁(福厚但懶)","廉貞貪狼(慾望抱負)"];
+      const ziwei = ziweiList[(lifeNum + (hour >= 0 ? hour : 4)) % ziweiList.length];
+
+      // 5. 數字易經
+      const phoneRes = analyzePhone(phone);
+
+      // 6. 姓名五行
+      const nameEleList = ["金性剛烈・自尊心強","木性仁慈・易遭剝削","水性聰慧・心緒漂泊","火性光明・易生急躁","土性穩重・過於固執"];
+      const nameEle = nameEleList[name.charCodeAt(0) % nameEleList.length];
+
+      // 7. 脈輪
+      const chakraList = [
+        { w: "海底輪匱乏", h: "缺乏扎根感與物質安全感，常感漂浮焦慮。" },
+        { w: "心輪緊閉", h: "曾在親密關係中受過暗傷，不敢輕易交付真心。" },
+        { w: "喉輪壓抑", h: "話到嘴邊常吞回去，習慣咽下委屈換取表面和諧。" },
+        { w: "太陽神經叢過旺", h: "掌控欲與焦慮並存，胃部容易緊繃不適。" }
+      ];
+      const chakra = chakraList[lifeNum % chakraList.length];
+
+      // 寫入介面
+      document.getElementById('sumTitle').innerText = `大沈堂診斷：${name} 的先天靈魂 vs 後天磁場`;
+      document.getElementById('sumDesc').innerHTML = `
+        你的靈魂是 <strong>${bazi.n}</strong> 的底子，帶著 <strong>${lifeNum} 號人</strong> 的天生使命，外表展現出 <strong>${zodiac}</strong> 的保護色。  
+        然而，你的後天手機磁場呈現 <strong style="color:var(--red-alert)">「${phoneRes.pairText}」</strong>，名字又帶著 <strong>${nameEle}</strong>。  
+        這就是為什麼你常常「內心很有想法與抱負，但一到執行就遇到暗耗小人，身體的 ${chakra.w} 也亮起紅燈」！
+      `;
+
+      document.getElementById('valLife').innerText = `${lifeNum} 號人`;
+      document.getElementById('hintLife').innerText = `天性具備強烈直覺，但總在責任與自我渴望之間劇烈拉扯。`;
+
+      document.getElementById('valZodiac').innerText = zodiac;
+      document.getElementById('hintZodiac').innerText = `習慣在外人面前維持體面堅強，夜晚獨處時才卸下防備。`;
+
+      document.getElementById('valBazi').innerText = `${bazi.n}`;
+      document.getElementById('hintBazi').innerText = bazi.desc;
+
+      document.getElementById('valZiwei').innerText = ziwei;
+      document.getElementById('hintZiwei').innerText = `命盤暗藏變動星曜，30-45 歲間有至關重要的生死轉折點。`;
+
+      document.getElementById('valPhone').innerText = phoneRes.pairText;
+      document.getElementById('hintPhone').innerText = phoneRes.isDanger ? `⚠️ 含有凶星破耗磁場，金錢容易無端流失或為他人背負債務。` : `目前磁場守成有餘，但缺乏強力爆發的生財推進力。`;
+
+      document.getElementById('valName').innerText = nameEle;
+      document.getElementById('hintName').innerText = `名字每天被人呼喚，此音頻能量正與你的日元產生暗中角力。`;
+
+      document.getElementById('valChakra').innerText = chakra.w;
+      document.getElementById('hintChakra').innerText = chakra.h;
+
+      // 初始化塔羅洗牌
+      initDeck();
+
+      // 展開儀表板並滾動
+      const dash = document.getElementById('dashboard');
+      dash.style.display = 'block';
+      dash.scrollIntoView({ behavior: 'smooth' });
+
+      // 背景靜默寫入 Google 試算表
+      if (GAS_WEB_APP_URL.includes("http")) {
+        fetch(GAS_WEB_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            name: name,
+            contact: "透視訪客 (末碼" + phone + ")",
+            birthday: birthStr,
+            coreNumber: lifeNum,
+            interests: "八維即刻透視",
+            topic: "先天與後天磁場矛盾",
+            note: `手機易經: ${phoneRes.pairText} | 八字日元: ${bazi.n} | 脈輪: ${chakra.w}`
+          })
+        }).catch(e => console.log("GAS Sync", e));
+      }
+    });
+
+    // 預約引流按鈕點擊
+    function submitToBooking(planName) {
+      const name = document.getElementById('inName').value || "尊貴貴賓";
+      const phone = document.getElementById('inPhone').value || "";
+      const msg = encodeURIComponent(`您好大沈堂，我是 ${name} (手機末4碼 ${phone})，我剛剛在官網完成了八維全景透視與三牌塔羅儀軌，想進一步：${planName}`);
+      window.open(`https://line.me/R/ti/p/請替換成你的LINE連結?text=${msg}`, '_blank');
+    }
+  </script>
+</body>
+</html>
